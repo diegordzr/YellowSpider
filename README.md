@@ -10,8 +10,7 @@ pip install -r requirements.txt
 ```
 ### Configuración
 
-configure el piplenine para configurar el destino de los datos
-Para almacenar los datos en MongoDB use el sig pipline
+Por defecto el único pipeline almacena los datos en MongoDB
 ```python
 ITEM_PIPELINES = ['yellow.pipelines.YellowPipeline']
 ```
