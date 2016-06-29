@@ -24,5 +24,5 @@ MONGODB_COLLECTION = "contacts"
 ### Uso
 Obtener información de contactos en la categoria software:
 ```sh
-scrapy crawl contacts -a category software
+scrapy crawl contacts -a category=software
 ```
