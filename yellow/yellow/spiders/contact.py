@@ -39,7 +39,8 @@ class ContactSpider(scrapy.Spider):
             contact['rating'] = ''.join(card.css('.rating').xpath('@class').extract()).replace('rating star', '')
             contact['votes'] = ''.join(card.css('.votes::text').extract())
 
-            full_info = ''.join(card.css('.mas_info').xpath('@href').extract())
+            full_info = ''.join(card.xpath('.//a[contains(@id, "Info_Normal")]/@href').extract())
+
             if (len(full_info) > 0):
                 request = scrapy.Request(full_info, callback=self.parse_full_contact)
                 request.meta['contact'] = contact
@@ -47,8 +48,11 @@ class ContactSpider(scrapy.Spider):
             else:
                 yield contact
 
-        link = response.css('.icon.next').xpath('@href').extract()[0]
-        url = urlparse.urljoin('http://www.seccionamarilla.com.mx', link)
+        btn_next = response.css('.icon.next')
+        if not btn_next.extract():
+            return
+
+        url = urlparse.urljoin('http://www.seccionamarilla.com.mx', btn_next.xpath('@href').extract()[0])
         yield scrapy.Request(url, callback=self.parse)
 
     def parse_full_contact(self, response):
@@ -56,7 +60,8 @@ class ContactSpider(scrapy.Spider):
 
         contact['email'] = ''.join(response.xpath('//a[contains(@href, "mailto")]/@href').extract()).replace('mailto:', '')
         contact['web_site'] = ''.join(response.css('.super_pagina').xpath('@href').extract())
+        contact['payment_types'] = response.css('.pago').xpath('a/text()').extract()
         contact['services'] = response.css('.servicios').xpath('ul/li/text()').extract()
-        
+        contact['schedules'] = response.css('.horarios').xpath('p/text()').extract()
         yield contact
 
