@@ -36,12 +36,12 @@ class YellowPipeline(object):
 
 	def process_item(self, item, spider):
 		#self.db[self.collection_name].insert(dict(item))
-		if('email' in item):
-			self.db[self.collection_name].find_one_and_update(
-				{ 'email': item['email'] }, #{ 'address': item['address'] },
-				{ '$set': dict(item) },
-				upsert=True)
-			log.msg("Contact added to MongoDB database!", level=log.DEBUG, spider=spider)
+		#if('email' in item):
+		self.db[self.collection_name].find_one_and_update(
+			{ 'key': item['key'] }, 
+			{ '$set': dict(item) },
+			upsert=True)
+		log.msg("Contact added to MongoDB database!", level=log.DEBUG, spider=spider)
 		return item
 
 

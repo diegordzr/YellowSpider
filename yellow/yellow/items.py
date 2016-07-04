@@ -16,6 +16,7 @@ class AddressItem(Item):
     state = Field()
 
 class ContactItem(Item):
+    key = Field()
     name = Field()
     phone = Field()
     email = Field()

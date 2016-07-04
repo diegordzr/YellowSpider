@@ -38,6 +38,7 @@ class ContactSpider(scrapy.Spider):
             
             contact['rating'] = ''.join(card.css('.rating').xpath('@class').extract()).replace('rating star', '')
             contact['votes'] = ''.join(card.css('.votes::text').extract())
+            contact['key'] = ''.join(card.xpath('.//a[contains(@id, "Name_Normal")]/@id').extract()).replace('Name_Normal-', '')
 
             full_info = ''.join(card.xpath('.//a[contains(@id, "Info_Normal")]/@href').extract())
 

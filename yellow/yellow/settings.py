@@ -16,9 +16,9 @@ NEWSPIDER_MODULE = 'yellow.spiders'
 
 ITEM_PIPELINES = ['yellow.pipelines.YellowPipeline']
 
-MONGODB_SERVER = "192.168.15.16"
+MONGODB_SERVER = "192.168.15.252"
 MONGODB_PORT = 27017
-MONGODB_DB = "test"
+MONGODB_DB = "seccion_amarilla"
 MONGODB_COLLECTION = "contacts"
 
 MX_STATES = [
