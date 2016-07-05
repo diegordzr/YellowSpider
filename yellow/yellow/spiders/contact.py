@@ -38,10 +38,14 @@ class ContactSpider(scrapy.Spider):
             
             contact['rating'] = ''.join(card.css('.rating').xpath('@class').extract()).replace('rating star', '')
             contact['votes'] = ''.join(card.css('.votes::text').extract())
-            contact['key'] = ''.join(card.xpath('.//a[contains(@id, "Name_Normal")]/@id').extract()).replace('Name_Normal-', '')
+    
+            key = ''.join(card.xpath('.//a[contains(@id, "Name_Normal")]/@id').extract()).replace('Name_Normal-', '')
+            if not key:
+                key = ''.join(card.xpath('.//a[contains(@id, "Info_Normal")]/@id').extract()).replace('Info_Normal-', '') 
+            contact['key'] = key 
+
 
             full_info = ''.join(card.xpath('.//a[contains(@id, "Info_Normal")]/@href').extract())
-
             if (len(full_info) > 0):
                 request = scrapy.Request(full_info, callback=self.parse_full_contact)
                 request.meta['contact'] = contact
@@ -64,5 +68,19 @@ class ContactSpider(scrapy.Spider):
         contact['payment_types'] = response.css('.pago').xpath('a/text()').extract()
         contact['services'] = response.css('.servicios').xpath('ul/li/text()').extract()
         contact['schedules'] = response.css('.horarios').xpath('p/text()').extract()
+        
+        position = ''.join(response.css('[name="geo.position"]').xpath('@content').extract()).split(';')
+        region = ''.join(response.css('[name="geo.region"]').xpath('@content').extract())
+        placename = ''.join(response.css('[name="geo.placename"]').xpath('@content').extract())
+        
+        if(len(position) == 2):
+            contact['geolocation'] = {
+                'placename': placename,
+                'region': region,
+                'position': {
+                    'latitude': position[0],
+                    'longitude': position[1]
+                }
+            }
         yield contact
 

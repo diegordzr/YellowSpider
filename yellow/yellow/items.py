@@ -21,6 +21,7 @@ class ContactItem(Item):
     phone = Field()
     email = Field()
     address = Field()
+    geolocation = Field()
     services = Field()
     schedules = Field()
     payment_types = Field()
